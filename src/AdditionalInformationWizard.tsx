@@ -16,16 +16,18 @@ import { Add } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export function AdditionalInformationWizard() {
+    const { configType } = useContext(ConfigContext);
+
     return (
         <>
             <h1>Additional Information</h1>
             <Stack direction='column' spacing={5} alignItems='center' py={3}>
-                <MetadataDropDown filterByType={'string'} name={'primaryKey'} />
+                {configType === 'SILO' && <MetadataDropDown filterByType={'string'} name={'primaryKey'} />}
                 <MetadataDropDown filterByType={'date'} name={'dateToSortBy'} />
                 <MetadataDropDown filterByType={'pango_lineage'} name={'partitionBy'} />
             </Stack>
 
-            <TableColumns />
+            {configType === 'Pathoplexus' && <TableColumns />}
         </>
     );
 }
