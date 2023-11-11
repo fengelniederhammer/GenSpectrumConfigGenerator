@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material';
-import { Config, ConfigProvider } from './configContext.tsx';
+import { Config, ConfigProvider, PartialConfig } from './configContext.tsx';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { ConfigWizard } from './ConfigWizard.tsx';
 import { Results } from './Results.tsx';
@@ -7,7 +7,7 @@ import { UploadConfig } from './UploadConfig.tsx';
 import { load } from 'js-yaml';
 
 export default function App() {
-    const [config, setConfig] = useState<undefined | Config>(undefined);
+    const [config, setConfig] = useState<PartialConfig | undefined>(undefined);
 
     if (config === undefined) {
         return (
@@ -31,7 +31,7 @@ export default function App() {
     );
 }
 
-function readAndSetConfigFile(file: File, setConfig: Dispatch<SetStateAction<Config | undefined>>) {
+function readAndSetConfigFile(file: File, setConfig: Dispatch<SetStateAction<PartialConfig | undefined>>) {
     const fileReader = new FileReader();
     fileReader.onloadend = () => {
         if (!fileReader.result) {
