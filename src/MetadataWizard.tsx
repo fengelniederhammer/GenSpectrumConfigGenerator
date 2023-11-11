@@ -1,61 +1,88 @@
-import {Box, Button, IconButton, MenuItem, Paper, Select, Stack, TextField, Tooltip} from "@mui/material";
+import { Box, IconButton, MenuItem, Paper, Select, Stack, TextField, Tooltip } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
-import {useContext, useState} from "react";
-import {ConfigContext} from "./configContext.tsx";
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useContext, useState } from 'react';
+import { ConfigContext, Metadata, MetadataType } from './configContext.tsx';
+import { Add } from '@mui/icons-material';
 
 export function MetadataWizard() {
-    const {config, addMetadata} = useContext(ConfigContext)
+    const { config, addNewMetadata } = useContext(ConfigContext);
     return (
         <>
-            <Stack direction="column">
+            <Stack direction='column'>
                 <h1>Metadata</h1>
-                <Stack direction="column">
-                    {
-                        config.metadata.map((metadata) => {
-                            return (
-                                <Paper>
-                                    <MetadataField key={metadata.name} name={metadata.name}/>
-                                </Paper>
-                            )
-                        })
-                    }
+                <Stack direction='column'>
+                    {config.metadata.map((metadata, index) => {
+                        return (
+                            <Paper key={metadata.name}>
+                                <MetadataField metadata={metadata} index={index} />
+                            </Paper>
+                        );
+                    })}
                 </Stack>
-                <Button>
-                    Add
-                </Button>
+                <IconButton
+                    onClick={() => {
+                        addNewMetadata();
+                    }}
+                >
+                    <Add />
+                </IconButton>
             </Stack>
         </>
     );
 }
 
+export function MetadataField({ index, metadata }: { index: number; metadata: Metadata }) {
+    const { config, updateMetadata, deleteMetadata } = useContext(ConfigContext);
 
-export function MetadataField({name}: { name: string }) {
-    const [metadataName, setMetadataName] = useState("")
+    const [metadataType, setMetadataType] = useState<MetadataType>('string');
+    const [metadataName, setMetadataName] = useState(metadata.name);
+    const [error, setError] = useState(false);
 
     return (
-        <Box component="form" onSubmit={() => {
-            console.log("submit")
-        }}>
-            <div>
-                {name}
-            </div>
-            <TextField>
-                {metadataName}
-            </TextField>
-            <Select label="Type" sx={{minWidth: "100px"}} value={"String"}>
-                <MenuItem value="string">String</MenuItem>
-                <MenuItem value="date">Date</MenuItem>
+        <Box>
+            <TextField
+                error={error}
+                defaultValue={metadataName}
+                onChange={(event) => {
+                    if (config.metadata.filter((metadata) => metadata.name === event.target.value).length > 0) {
+                        setError(true);
+                        return;
+                    }
+                    setMetadataName(event.target.value);
+                }}
+                onBlur={() => {
+                    updateMetadata({ ...metadata, name: metadataName }, index);
+                }}
+            />
+
+            <Select
+                sx={{ minWidth: '100px' }}
+                value={metadataType}
+                labelId='select-medatata-type-label'
+                onChange={(event) => {
+                    const type = event.target.value as MetadataType;
+                    setMetadataType(type);
+                    updateMetadata({ ...metadata, type: type }, index);
+                }}
+            >
+                <MenuItem value='string'>String</MenuItem>
+                <MenuItem value='date'>Date</MenuItem>
             </Select>
-            <Tooltip title={"Stuff"}>
+
+            <Tooltip title={'Stuff'}>
                 <IconButton>
-                    <HelpIcon/>
+                    <HelpIcon />
                 </IconButton>
             </Tooltip>
-            <Button>
-                Delete
-            </Button>
 
+            <IconButton
+                onClick={() => {
+                    deleteMetadata(index);
+                }}
+            >
+                <DeleteIcon />
+            </IconButton>
         </Box>
     );
 }
