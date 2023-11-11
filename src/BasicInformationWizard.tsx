@@ -71,10 +71,9 @@ function FeaturesModifier() {
         <FormGroup>
             <FormLabel>LAPIS Features</FormLabel>
             {features.map(({ featureName, label }) => (
-                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Box key={featureName} sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                     <FormLabel>{label}</FormLabel>
                     <Checkbox
-                        key={featureName}
                         onChange={(event) => modifyFeatureFields(featureName, event.target.checked ? 'add' : 'delete')}
                         defaultChecked={hasFeature(config, featureName)}
                     />
