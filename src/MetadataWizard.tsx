@@ -1,4 +1,16 @@
-import { Box, IconButton, MenuItem, Paper, Select, Stack, TextField, Tooltip } from '@mui/material';
+import {
+    Box,
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
+    SelectChangeEvent,
+    Stack,
+    TextField,
+    Tooltip,
+} from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useContext, useState } from 'react';
@@ -11,7 +23,7 @@ export function MetadataWizard() {
         <>
             <Stack direction='column'>
                 <h1>Metadata</h1>
-                <Stack direction='column'>
+                <Stack direction='column' spacing={2}>
                     {config.metadata.map((metadata, index) => {
                         return (
                             <Paper key={metadata.name}>
@@ -40,7 +52,7 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
     const [error, setError] = useState(false);
 
     return (
-        <Box>
+        <Stack direction={'row'}>
             <TextField
                 error={error}
                 defaultValue={metadataName}
@@ -56,20 +68,23 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
                 }}
             />
 
-            <Select
-                sx={{ minWidth: '100px' }}
-                value={metadataType}
-                labelId='select-medatata-type-label'
-                onChange={(event) => {
-                    const type = event.target.value as MetadataType;
-                    setMetadataType(type);
-                    updateMetadata({ ...metadata, type: type }, index);
-                }}
-            >
-                <MenuItem value='string'>String</MenuItem>
-                <MenuItem value='date'>Date</MenuItem>
-            </Select>
-
+            <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                    <InputLabel id='select-metadata-type-select-label'>Type</InputLabel>
+                    <Select
+                        id='select-metadata-type-select-label'
+                        value={metadataType}
+                        onChange={(event: SelectChangeEvent) => {
+                            const type = event.target.value as MetadataType;
+                            setMetadataType(type);
+                            updateMetadata({ ...metadata, type }, index);
+                        }}
+                    >
+                        <MenuItem value={'string'}>String</MenuItem>
+                        <MenuItem value={'date'}>Date</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
             <Tooltip title={'Stuff'}>
                 <IconButton>
                     <HelpIcon />
@@ -83,6 +98,6 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
             >
                 <DeleteIcon />
             </IconButton>
-        </Box>
+        </Stack>
     );
 }
