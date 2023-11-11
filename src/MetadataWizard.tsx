@@ -48,15 +48,15 @@ export function MetadataWizard() {
 }
 
 export function MetadataField({ index, metadata }: { index: number; metadata: Metadata }) {
-    const { config, updateMetadata, deleteMetadata } = useContext(ConfigContext);
+    const { config, updateMetadata, deleteMetadata, configType } = useContext(ConfigContext);
 
     const [metadataType, setMetadataType] = useState<MetadataType>('string');
     const [metadataName, setMetadataName] = useState(metadata.name);
     const [error, setError] = useState(false);
     const [generateIndex, setGenerateIndex] = useState(metadata.generateIndex);
-    const [autocomplete, setAutocomplete] = useState(false);
-    const [required, setRequired] = useState(false);
-    const [notSearchable, setNotSearchable] = useState(false);
+    const [autocomplete, setAutocomplete] = useState<boolean | undefined>(metadata.autocomplete);
+    const [required, setRequired] = useState<boolean | undefined>(metadata.required);
+    const [notSearchable, setNotSearchable] = useState<boolean | undefined>(metadata.notSearchable);
 
     return (
         <>
@@ -124,47 +124,49 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
                         />
                     </FormGroup>
 
-                    <FormGroup>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={autocomplete}
-                                    onChange={(event) => {
-                                        const useAutocomplete = event.target.checked;
-                                        setAutocomplete(useAutocomplete);
-                                        updateMetadata({ ...metadata, autocomplete: useAutocomplete }, index);
-                                    }}
-                                />
-                            }
-                            label='autocomplete'
-                        />
+                    {configType === 'Pathoplexus' && (
+                        <FormGroup>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={autocomplete}
+                                        onChange={(event) => {
+                                            const useAutocomplete = event.target.checked;
+                                            setAutocomplete(useAutocomplete);
+                                            updateMetadata({ ...metadata, autocomplete: useAutocomplete }, index);
+                                        }}
+                                    />
+                                }
+                                label='autocomplete'
+                            />
 
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={required}
-                                    onChange={(event) => {
-                                        setRequired(event.target.checked);
-                                        updateMetadata({ ...metadata, required: event.target.checked }, index);
-                                    }}
-                                />
-                            }
-                            label='required'
-                        />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={required}
+                                        onChange={(event) => {
+                                            setRequired(event.target.checked);
+                                            updateMetadata({ ...metadata, required: event.target.checked }, index);
+                                        }}
+                                    />
+                                }
+                                label='required'
+                            />
 
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={notSearchable}
-                                    onChange={(event) => {
-                                        setNotSearchable(event.target.checked);
-                                        updateMetadata({ ...metadata, notSearchable: event.target.checked }, index);
-                                    }}
-                                />
-                            }
-                            label='not searchable'
-                        />
-                    </FormGroup>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={notSearchable}
+                                        onChange={(event) => {
+                                            setNotSearchable(event.target.checked);
+                                            updateMetadata({ ...metadata, notSearchable: event.target.checked }, index);
+                                        }}
+                                    />
+                                }
+                                label='not searchable'
+                            />
+                        </FormGroup>
+                    )}
                 </FormControl>
             </Box>
         </>
