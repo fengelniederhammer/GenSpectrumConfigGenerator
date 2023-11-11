@@ -1,11 +1,11 @@
-import React, { FC, PropsWithChildren } from 'react';
+import {createContext, FC, PropsWithChildren} from 'react';
 
 export type Config = {};
 
-export const ConfigContext = React.createContext<Config>({});
+export const ConfigContext = createContext<Config>({});
 
-export const ConfigProvider: FC<PropsWithChildren> = ({ children }) => {
-    const config = {};
-
-    return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
+export const ConfigProvider: FC<PropsWithChildren<{
+    initialConfig: Config
+}>> = ({children, initialConfig}) => {
+    return <ConfigContext.Provider value={initialConfig}>{children}</ConfigContext.Provider>;
 };
