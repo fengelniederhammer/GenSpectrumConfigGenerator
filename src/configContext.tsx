@@ -28,11 +28,7 @@ export const ConfigContext = createContext<ConfigContextType>({
     modifyConfigField: () => {},
 });
 
-export const ConfigProvider: FC<
-    PropsWithChildren<{
-        initialConfig: Config;
-    }>
-> = ({ children, initialConfig }) => {
+export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: Config; }>> = ({ children, initialConfig }) => {
     const [config, setConfig] = useState(initialConfig);
 
     const addMetadata = (metadata: Metadata) => {
