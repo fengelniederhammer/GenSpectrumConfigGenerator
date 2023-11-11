@@ -34,7 +34,15 @@ export type ConfigContextType = {
     modifyFeatureFields: (featureName: string, action: 'add' | 'delete') => void;
 };
 
-export type MetadataType = 'string' | 'date' | 'pango_lineage';
+export type MetadataType =
+    | 'string'
+    | 'date'
+    | 'pango_lineage'
+    | 'int'
+    | 'float'
+    | 'insertion'
+    | 'aaInsertion'
+    | 'boolean';
 
 export type Metadata = {
     name: string;
