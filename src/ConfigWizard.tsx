@@ -1,8 +1,8 @@
-import {useState} from 'react';
-import {Box, Button, Step, StepButton, Stepper} from '@mui/material';
-import {BasicInformationWizard} from './BasicInformationWizard.tsx';
-import {MetadataWizard} from './MetadataWizard.tsx';
-import {AdditionalInformationWizard} from './AdditionalInformationWizard.tsx';
+import { useState } from 'react';
+import { Box, Button, Step, StepButton, Stepper } from '@mui/material';
+import { BasicInformationWizard } from './BasicInformationWizard.tsx';
+import { MetadataWizard } from './MetadataWizard.tsx';
+import { AdditionalInformationWizard } from './AdditionalInformationWizard.tsx';
 
 const steps = ['Basic Information', 'Metadata', 'Additional Information'] as const;
 const totalSteps = steps.length;
@@ -36,11 +36,16 @@ export function ConfigWizard() {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <WizardForStep step={steps[activeStep]} />
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <Button color='inherit' onClick={handleBack} sx={{ mr: 1 }} disabled={activeStep <= 0}>
+                    <Button variant='outlined' onClick={handleBack} sx={{ mr: 1 }} disabled={activeStep <= 0}>
                         Back
                     </Button>
                     <Box sx={{ flex: '1 1 auto' }} />
-                    <Button onClick={handleNext} sx={{ mr: 1 }} disabled={activeStep >= totalSteps - 1}>
+                    <Button
+                        variant='contained'
+                        onClick={handleNext}
+                        sx={{ mr: 1 }}
+                        disabled={activeStep >= totalSteps - 1}
+                    >
                         Next
                     </Button>
                 </Box>
