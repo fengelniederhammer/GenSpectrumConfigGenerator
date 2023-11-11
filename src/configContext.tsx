@@ -13,11 +13,13 @@ export type Config = {
     features: Feature[];
 };
 
-export type PartialConfig = Partial<Config>;
+export type PartialConfig = Partial<Config> & {metadata: Metadata[]};
 
 export type ConfigContextType = {
     config: PartialConfig;
-    addMetadata: (metadata: Metadata) => void;
+    addNewMetadata: () => void;
+    updateMetadata: (metadata: Metadata, index: number) => void;
+    deleteMetadata: (index: number) => void;
     modifyConfigField: <T extends keyof Config>(field: T, value: Config[T]) => void;
     modifyFeatureFields: (featureName: string, action: 'add' | 'delete') => void;
 };
@@ -36,7 +38,9 @@ export type Feature = {
 
 export const ConfigContext = createContext<ConfigContextType>({
     config: { metadata: [], primaryKey: '' },
-    addMetadata: () => {},
+    addNewMetadata: () => {},
+    updateMetadata: () => {},
+    deleteMetadata: () => {},
     modifyConfigField: () => {},
     modifyFeatureFields: () => {},
 });
@@ -47,11 +51,46 @@ export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: PartialConfig
 }) => {
     const [config, setConfig] = useState(initialConfig);
 
+    const addNewMetadata = () => {
+        const metadata: Metadata = {
+            name: 'New Metadata',
+            type: 'string',
+            generateIndex: true,
+        };
+
+        const existingMetadata = config.metadata.filter((metadata) => metadata.name.startsWith('New Metadata'));
+
+        if (existingMetadata.length > 0) {
+            metadata.name = `${metadata.name} (${existingMetadata.length + 1})`;
+        }
+
+        setConfig({
+            ...config,
+            metadata: [...config.metadata, metadata],
+        });
+    };
+
+    const updateMetadata = (metadata: Metadata, index: number) => {
+        setConfig({
+            ...config,
+            metadata: [...config.metadata.slice(0, index), metadata, ...config.metadata.slice(index + 1)],
+        });
+    };
+
+    const deleteMetadata = (index: number) => {
+        setConfig({
+            ...config,
+            metadata: [...config.metadata.slice(0, index), ...config.metadata.slice(index + 1)],
+        });
+    }
+    
     return (
         <ConfigContext.Provider
             value={{
                 config,
-                addMetadata: (metadata) => setConfig({ ...config, metadata: [...(config.metadata ?? []), metadata] }),
+                updateMetadata,
+                addNewMetadata,
+                deleteMetadata,
                 modifyConfigField: (field, value) => setConfig({ ...config, [field]: value }),
                 modifyFeatureFields: (featureName, action) => {
                     const features = config.features ?? [];
