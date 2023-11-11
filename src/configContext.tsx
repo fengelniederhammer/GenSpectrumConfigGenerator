@@ -12,6 +12,9 @@ export type Config = {
     opennessLevel: OpennessLevel;
     metadata: Metadata[];
     primaryKey: string;
+    dateToSortBy: string;
+    partitionBy: string;
+    tableColumns: string[];
     features: Feature[];
 };
 
@@ -24,11 +27,14 @@ export type ConfigContextType = {
     addNewMetadata: () => void;
     updateMetadata: (metadata: Metadata, index: number) => void;
     deleteMetadata: (index: number) => void;
+    addNewTableColumn: (newColumnName: string) => void;
+    updateTableColumn: (columnName: string, index: number) => void;
+    deleteTableColumn: (index: number) => void;
     modifyConfigField: <T extends keyof Config>(field: T, value: Config[T]) => void;
     modifyFeatureFields: (featureName: string, action: 'add' | 'delete') => void;
 };
 
-export type MetadataType = 'string' | 'date';
+export type MetadataType = 'string' | 'date' | 'pango_lineage';
 
 export type Metadata = {
     name: string;
@@ -46,10 +52,13 @@ export type Feature = {
 export const ConfigContext = createContext<ConfigContextType>({
     configType: 'SILO',
     setConfigType: () => {},
-    config: { metadata: [], primaryKey: '' },
+    config: { metadata: [], primaryKey: '', tableColumns: [] },
     addNewMetadata: () => {},
     updateMetadata: () => {},
     deleteMetadata: () => {},
+    addNewTableColumn: () => {},
+    updateTableColumn: () => {},
+    deleteTableColumn: () => {},
     modifyConfigField: () => {},
     modifyFeatureFields: () => {},
 });
@@ -94,6 +103,33 @@ export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: PartialConfig
         });
     };
 
+    const addNewTableColumn = (newColumnName: string) => {
+        setConfig({
+            ...config,
+            tableColumns: [...(config.tableColumns ?? []), newColumnName],
+        });
+    };
+
+    const updateTableColumn = (newColumnName: string, index: number) => {
+        setConfig({
+            ...config,
+            tableColumns: [
+                ...(config.tableColumns ?? []).slice(0, index),
+                newColumnName,
+                ...(config.tableColumns ?? []).slice(index + 1),
+            ],
+        });
+    };
+
+    const deleteTableColumn = (index: number) => {
+        setConfig({
+            ...config,
+            tableColumns: [
+                ...(config.tableColumns ?? []).slice(0, index),
+                ...(config.tableColumns ?? []).slice(index + 1),
+            ],
+        });
+    };
     return (
         <ConfigContext.Provider
             value={{
@@ -103,6 +139,9 @@ export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: PartialConfig
                 updateMetadata,
                 addNewMetadata,
                 deleteMetadata,
+                addNewTableColumn,
+                updateTableColumn,
+                deleteTableColumn,
                 modifyConfigField: (field, value) => setConfig({ ...config, [field]: value }),
                 modifyFeatureFields: (featureName, action) => {
                     const features = config.features ?? [];
