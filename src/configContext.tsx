@@ -8,8 +8,10 @@ export type Config = {
     primaryKey: string;
 };
 
+export type PartialConfig = Partial<Config>;
+
 export type ConfigContextType = {
-    config: Config;
+    config: PartialConfig;
     addMetadata: (metadata: Metadata) => void;
     modifyConfigField: <T extends keyof Config>(field: T, value: Config[T]) => void;
 };
@@ -28,21 +30,21 @@ export const ConfigContext = createContext<ConfigContextType>({
     modifyConfigField: () => {},
 });
 
-export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: Config; }>> = ({ children, initialConfig }) => {
+export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: PartialConfig }>> = ({
+    children,
+    initialConfig,
+}) => {
     const [config, setConfig] = useState(initialConfig);
 
-    const addMetadata = (metadata: Metadata) => {
-        setConfig({
-            ...config,
-            metadata: [...config.metadata, metadata],
-        });
-    };
-
-    const modifyConfigField = <T extends keyof Config>(field: T, value: Config[T]) => {
-        setConfig({ ...config, [field]: value });
-    };
-
     return (
-        <ConfigContext.Provider value={{ config, addMetadata, modifyConfigField }}>{children}</ConfigContext.Provider>
+        <ConfigContext.Provider
+            value={{
+                config,
+                addMetadata: (metadata) => setConfig({ ...config, metadata: [...(config.metadata ?? []), metadata] }),
+                modifyConfigField: (field, value) => setConfig({ ...config, [field]: value }),
+            }}
+        >
+            {children}
+        </ConfigContext.Provider>
     );
 };
