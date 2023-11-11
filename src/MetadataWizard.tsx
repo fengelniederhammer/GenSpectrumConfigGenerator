@@ -90,9 +90,15 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
                         >
                             <MenuItem value={'string'}>String</MenuItem>
                             <MenuItem value={'date'}>Date</MenuItem>
+                            <MenuItem value={'number'}>Number</MenuItem>
+                            <MenuItem value={'boolean'}>Boolean</MenuItem>
+                            <MenuItem value={'pango_linegae'}>Pango lineage</MenuItem>
+                            <MenuItem value={'insertion'}>Insertion</MenuItem>
+                            <MenuItem value={'aaInsertion'}>AA insertion</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>
+
                 <Tooltip title={'Stuff'}>
                     <IconButton>
                         <HelpIcon />
