@@ -1,7 +1,8 @@
-import {Button} from '@mui/material';
+import {Box, Button} from '@mui/material';
 import {ConfigProvider} from './configContext.tsx';
 import {useState} from 'react';
 import {ConfigWizard} from './ConfigWizard.tsx';
+import {Results} from "./Results.tsx";
 
 function App() {
     const [newConfig, setNewConfig] = useState(true);
@@ -28,8 +29,11 @@ function App() {
     }
 
     return (
-        <ConfigProvider initialConfig={config}>
-            <ConfigWizard/>
+        <ConfigProvider initialConfig={config}>#
+            <Box sx={{  display: 'flex'  }}>
+                <ConfigWizard/>
+                <Results />
+            </Box>
         </ConfigProvider>
     );
 }
