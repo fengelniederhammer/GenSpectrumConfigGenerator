@@ -53,6 +53,7 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
     const [metadataType, setMetadataType] = useState<MetadataType>('string');
     const [metadataName, setMetadataName] = useState(metadata.name);
     const [error, setError] = useState(false);
+    const [generateIndex, setGenerateIndex] = useState(metadata.generateIndex);
     const [autocomplete, setAutocomplete] = useState(false);
     const [required, setRequired] = useState(false);
     const [notSearchable, setNotSearchable] = useState(false);
@@ -108,6 +109,21 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
             </Stack>
             <Box sx={{ display: 'flex' }}>
                 <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
+                    <FormGroup>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={generateIndex}
+                                    onChange={(event) => {
+                                        setGenerateIndex(event.target.checked);
+                                        updateMetadata({ ...metadata, generateIndex: event.target.checked }, index);
+                                    }}
+                                />
+                            }
+                            label='generate index'
+                        />
+                    </FormGroup>
+
                     <FormGroup>
                         <FormControlLabel
                             control={
