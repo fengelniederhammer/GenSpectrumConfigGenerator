@@ -34,6 +34,9 @@ export type Metadata = {
     name: string;
     type: MetadataType;
     generateIndex: boolean;
+    autocomplete?: boolean;
+    required?: boolean;
+    notSearchable?: boolean;
 };
 
 export type Feature = {
@@ -62,7 +65,7 @@ export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: PartialConfig
         const metadata: Metadata = {
             name: 'New Metadata',
             type: 'string',
-            generateIndex: true,
+            generateIndex: false,
         };
 
         const existingMetadata = config.metadata.filter((metadata) => metadata.name.startsWith('New Metadata'));
