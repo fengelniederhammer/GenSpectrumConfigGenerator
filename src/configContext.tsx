@@ -1,11 +1,13 @@
 import { createContext, FC, PropsWithChildren, useState } from 'react';
+import { z } from 'zod';
 
 export type ConfigType = 'SILO' | 'Pathoplexus';
 
 export const LAPIS_OPENNESS_OPEN = 'OPEN';
 export const LAPIS_OPENNESS_PROTECTED = 'PROTECTED';
 
-export type OpennessLevel = typeof LAPIS_OPENNESS_OPEN | typeof LAPIS_OPENNESS_PROTECTED;
+export const opennessLevelSchema = z.enum([LAPIS_OPENNESS_OPEN, LAPIS_OPENNESS_PROTECTED]);
+export type OpennessLevel = z.infer<typeof opennessLevelSchema>;
 
 export type Config = {
     instanceName: string;
@@ -34,15 +36,17 @@ export type ConfigContextType = {
     modifyFeatureFields: (featureName: string, action: 'add' | 'delete') => void;
 };
 
-export type MetadataType =
-    | 'string'
-    | 'date'
-    | 'pango_lineage'
-    | 'int'
-    | 'float'
-    | 'insertion'
-    | 'aaInsertion'
-    | 'boolean';
+export const metadataTypeSchema = z.enum([
+    'string',
+    'date',
+    'pango_lineage',
+    'int',
+    'float',
+    'insertion',
+    'aaInsertion',
+    'boolean',
+]);
+export type MetadataType = z.infer<typeof metadataTypeSchema>;
 
 export type Metadata = {
     name: string;
@@ -53,9 +57,10 @@ export type Metadata = {
     notSearchable?: boolean;
 };
 
-export type Feature = {
-    name: string;
-};
+export const featureSchema = z.object({
+    name: z.string(),
+});
+export type Feature = z.infer<typeof featureSchema>;
 
 export const ConfigContext = createContext<ConfigContextType>({
     configType: 'SILO',
