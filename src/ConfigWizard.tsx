@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { ConfigContext } from './configContext.tsx';
+import { useState } from 'react';
 import { Box, Button, Step, StepButton, Stepper, Typography } from '@mui/material';
 import { BasicInformationWizard } from './BasicInformationWizard.tsx';
 import { MetadataWizard } from './MetadataWizard.tsx';
@@ -9,8 +8,6 @@ const steps = ['Basic Information', 'Metadata', 'Additional Information'] as con
 const totalSteps = steps.length;
 
 export function ConfigWizard() {
-    const configContext = useContext(ConfigContext);
-
     const [activeStep, setActiveStep] = useState(0);
 
     const handleNext = () => {
@@ -36,10 +33,9 @@ export function ConfigWizard() {
                     </Step>
                 ))}
             </Stepper>
-            <div>
-                <Typography sx={{ mt: 2, mb: 1, py: 1 }}>Step {activeStep + 1}</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <WizardForStep step={steps[activeStep]} />
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <WizardForStep step={steps[activeStep]} />
                     <Button color='inherit' onClick={handleBack} sx={{ mr: 1 }} disabled={activeStep <= 0}>
                         Back
                     </Button>
@@ -48,7 +44,7 @@ export function ConfigWizard() {
                         Next
                     </Button>
                 </Box>
-            </div>
+            </Box>
         </Box>
     );
 }
