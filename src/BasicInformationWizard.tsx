@@ -27,7 +27,7 @@ const features = [
 ];
 
 export function BasicInformationWizard() {
-    const { config, modifyConfigField } = useContext(ConfigContext);
+    const { configType, setConfigType, config, modifyConfigField } = useContext(ConfigContext);
 
     useEffect(() => {
         if (config.opennessLevel === undefined) {
@@ -46,7 +46,10 @@ export function BasicInformationWizard() {
             />
             <Stack direction='row' spacing={1} alignItems='center'>
                 <Typography>SILO/LAPIS</Typography>
-                <Switch />
+                <Switch
+                    onChange={(event) => setConfigType(event.target.checked ? 'Pathoplexus' : 'SILO')}
+                    checked={configType === 'Pathoplexus'}
+                />
                 <Typography>Pathoplexus</Typography>
             </Stack>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -59,7 +62,7 @@ export function BasicInformationWizard() {
                     <MenuItem value={LAPIS_OPENNESS_PROTECTED}>Protected</MenuItem>
                 </Select>
             </Box>
-            <FeaturesModifier />
+            {configType === 'SILO' && <FeaturesModifier />}
         </>
     );
 }

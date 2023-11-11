@@ -1,5 +1,7 @@
 import { createContext, FC, PropsWithChildren, useState } from 'react';
 
+export type ConfigType = 'SILO' | 'Pathoplexus';
+
 export const LAPIS_OPENNESS_OPEN = 'OPEN';
 export const LAPIS_OPENNESS_PROTECTED = 'PROTECTED';
 
@@ -13,9 +15,11 @@ export type Config = {
     features: Feature[];
 };
 
-export type PartialConfig = Partial<Config> & {metadata: Metadata[]};
+export type PartialConfig = Partial<Config> & { metadata: Metadata[] };
 
 export type ConfigContextType = {
+    configType: ConfigType;
+    setConfigType: (configType: ConfigType) => void;
     config: PartialConfig;
     addNewMetadata: () => void;
     updateMetadata: (metadata: Metadata, index: number) => void;
@@ -37,6 +41,8 @@ export type Feature = {
 };
 
 export const ConfigContext = createContext<ConfigContextType>({
+    configType: 'SILO',
+    setConfigType: () => {},
     config: { metadata: [], primaryKey: '' },
     addNewMetadata: () => {},
     updateMetadata: () => {},
@@ -50,6 +56,7 @@ export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: PartialConfig
     initialConfig,
 }) => {
     const [config, setConfig] = useState(initialConfig);
+    const [configType, setConfigType] = useState<ConfigType>('SILO');
 
     const addNewMetadata = () => {
         const metadata: Metadata = {
@@ -82,11 +89,13 @@ export const ConfigProvider: FC<PropsWithChildren<{ initialConfig: PartialConfig
             ...config,
             metadata: [...config.metadata.slice(0, index), ...config.metadata.slice(index + 1)],
         });
-    }
-    
+    };
+
     return (
         <ConfigContext.Provider
             value={{
+                configType,
+                setConfigType,
                 config,
                 updateMetadata,
                 addNewMetadata,
