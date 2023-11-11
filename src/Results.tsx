@@ -6,12 +6,12 @@ import {dump} from "js-yaml";
 import {Box} from "@mui/material";
 
 export const Results : FC  = () => {
-    const configContext = useContext(ConfigContext);
+    const {config} = useContext(ConfigContext);
 
 
     function handleDownload() {
 
-        const blob = new Blob([dump(configContext)], { type: 'text/plain' });
+        const blob = new Blob([dump(config)], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
 
         const a = document.createElement('a');
@@ -37,7 +37,7 @@ export const Results : FC  = () => {
         >
             <h2>Results</h2>
             <div>
-                {dump(configContext)}
+                {dump(config)}
             </div>
             <button onClick={handleDownload}>Download</button>
         </Box>
