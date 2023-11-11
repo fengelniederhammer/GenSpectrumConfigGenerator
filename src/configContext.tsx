@@ -9,7 +9,6 @@ export type Config = {
 
 export type ConfigContextType = {
     config: Config,
-    setConfig: (config: Config) => void
     addMetadata: (metadata: Metadata) => void
 }
 
@@ -23,8 +22,6 @@ export type Metadata = {
 
 export const ConfigContext = createContext<ConfigContextType>({
     config: {metadata: []},
-    setConfig: () => {
-    },
     addMetadata: () => {
     }
 })
@@ -45,5 +42,5 @@ export const ConfigProvider: FC<PropsWithChildren<{
         })
     }
 
-    return <ConfigContext.Provider value={{config, setConfig, addMetadata}}>{children}</ConfigContext.Provider>;
+    return <ConfigContext.Provider value={{config, addMetadata}}>{children}</ConfigContext.Provider>;
 };
