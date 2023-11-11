@@ -39,7 +39,7 @@ function readAndSetConfigFile(file: File, setConfig: Dispatch<SetStateAction<Par
         }
         const fileContent = fileReader.result.toString();
         const config = load(fileContent);
-        setConfig(config as Config);
+        setConfig((config as { schema: Config }).schema);
     };
     fileReader.readAsText(file);
 }
