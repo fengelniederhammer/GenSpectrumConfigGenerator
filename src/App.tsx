@@ -1,12 +1,12 @@
 import {Box, Button} from '@mui/material';
-import {ConfigProvider} from './configContext.tsx';
+import {Config, ConfigProvider} from './configContext.tsx';
 import {useState} from 'react';
 import {ConfigWizard} from './ConfigWizard.tsx';
 import {Results} from "./Results.tsx";
 
 function App() {
     const [newConfig, setNewConfig] = useState(true);
-    const [config, setConfig] = useState({});
+    const [config, setConfig] = useState<Config>({metadata: []});
 
     if (newConfig) {
         return (
@@ -14,13 +14,21 @@ function App() {
                 <h1>Config Generator</h1>
                 <Button onClick={() => {
                     setNewConfig(false);
-                    setConfig({name: 'test'});
+                    setConfig({
+                        metadata: [
+                            {name: 'fromNew', type: 'string', generateIndex: true},
+                        ]
+                    });
                 }}>
                     New
                 </Button>
                 <Button onClick={() => {
                     setNewConfig(false);
-                    setConfig({name: 'test2'});
+                    setConfig({
+                        metadata: [
+                            {name: 'fromUpload', type: 'string', generateIndex: true},
+                        ]
+                    });
                 }}>
                     Upload
                 </Button>
@@ -30,9 +38,9 @@ function App() {
 
     return (
         <ConfigProvider initialConfig={config}>#
-            <Box sx={{  display: 'flex'  }}>
+            <Box sx={{display: 'flex'}}>
                 <ConfigWizard/>
-                <Results />
+                <Results/>
             </Box>
         </ConfigProvider>
     );

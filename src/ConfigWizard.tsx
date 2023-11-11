@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Box, Button, Step, StepButton, Stepper, Typography } from '@mui/material';
-import { BasicInformationWizard } from './BasicInformationWizard.tsx';
-import { MetadataWizard } from './MetadataWizard.tsx';
-import { AdditionalInformationWizard } from './AdditionalInformationWizard.tsx';
+import {useState} from 'react';
+import {Box, Button, Step, StepButton, Stepper} from '@mui/material';
+import {BasicInformationWizard} from './BasicInformationWizard.tsx';
+import {MetadataWizard} from './MetadataWizard.tsx';
+import {AdditionalInformationWizard} from './AdditionalInformationWizard.tsx';
 
 const steps = ['Basic Information', 'Metadata', 'Additional Information'] as const;
 const totalSteps = steps.length;
