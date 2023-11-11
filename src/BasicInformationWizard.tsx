@@ -42,7 +42,7 @@ export function BasicInformationWizard() {
                 label='Instance Name'
                 variant='outlined'
                 onChange={(event) => modifyConfigField('instanceName', event.target.value)}
-                defaultValue={config.instanceName ?? ''}
+                value={config.instanceName ?? ''}
             />
             <Stack direction='row' spacing={1} alignItems='center'>
                 <Typography>SILO/LAPIS</Typography>
@@ -55,7 +55,7 @@ export function BasicInformationWizard() {
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                 <Typography>LAPIS Openness</Typography>
                 <Select
-                    defaultValue={config.opennessLevel ?? LAPIS_OPENNESS_OPEN}
+                    value={config.opennessLevel ?? LAPIS_OPENNESS_OPEN}
                     onChange={(event) => modifyConfigField('opennessLevel', event.target.value as OpennessLevel)}
                 >
                     <MenuItem value={LAPIS_OPENNESS_OPEN}>Open</MenuItem>
@@ -78,7 +78,7 @@ function FeaturesModifier() {
                     <FormLabel>{label}</FormLabel>
                     <Checkbox
                         onChange={(event) => modifyFeatureFields(featureName, event.target.checked ? 'add' : 'delete')}
-                        defaultChecked={hasFeature(config, featureName)}
+                        checked={hasFeature(config, featureName)}
                     />
                 </Box>
             ))}
