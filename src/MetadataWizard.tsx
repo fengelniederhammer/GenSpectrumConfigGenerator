@@ -5,14 +5,14 @@ import {ConfigContext} from "./configContext.tsx";
 
 
 export function MetadataWizard() {
-    const {metadata} = useContext(ConfigContext)
+    const {config, addMetadata} = useContext(ConfigContext)
     return (
         <>
             <Stack direction="column">
                 <h1>Metadata</h1>
                 <Stack direction="column">
                     {
-                        metadata.map((metadata) => {
+                        config.metadata.map((metadata) => {
                             return (
                                 <Paper>
                                     <MetadataField key={metadata.name} name={metadata.name}/>
