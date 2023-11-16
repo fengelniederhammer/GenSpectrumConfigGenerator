@@ -50,7 +50,7 @@ export function MetadataWizard() {
 export function MetadataField({ index, metadata }: { index: number; metadata: Metadata }) {
     const { config, updateMetadata, deleteMetadata, configType } = useContext(ConfigContext);
 
-    const [metadataType, setMetadataType] = useState<MetadataType>('string');
+    const [metadataType, setMetadataType] = useState<MetadataType>(metadata.type);
     const [metadataName, setMetadataName] = useState(metadata.name);
     const [error, setError] = useState(false);
     const [generateIndex, setGenerateIndex] = useState(metadata.generateIndex);
@@ -92,7 +92,7 @@ export function MetadataField({ index, metadata }: { index: number; metadata: Me
                             <MenuItem value={'date'}>Date</MenuItem>
                             <MenuItem value={'number'}>Number</MenuItem>
                             <MenuItem value={'boolean'}>Boolean</MenuItem>
-                            <MenuItem value={'pango_linegae'}>Pango lineage</MenuItem>
+                            <MenuItem value={'pango_lineage'}>Pango lineage</MenuItem>
                             <MenuItem value={'insertion'}>Insertion</MenuItem>
                             <MenuItem value={'aaInsertion'}>AA insertion</MenuItem>
                         </Select>
